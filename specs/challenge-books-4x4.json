@@ -1,0 +1,78 @@
+{
+    "type": "grid",
+    "id": "challenge-1-2-books",
+    "geometry": {
+        "center": {
+            "x": 512,
+            "y": 512
+        },
+        "width": 800,
+        "height": 800
+    },
+    "grid": {
+        "rows": 4,
+        "cols": 4,
+        "spacing": 20,
+        "items": [
+            {
+                "label": "📕 1"
+            },
+            {
+                "label": "📗 2"
+            },
+            {
+                "label": "📘 3"
+            },
+            {
+                "label": "📙 4"
+            },
+            {
+                "label": "📔 5"
+            },
+            {
+                "label": "📓 6"
+            },
+            {
+                "label": "📒 7"
+            },
+            {
+                "label": "📜 8"
+            },
+            {
+                "label": "📖 9"
+            },
+            {
+                "label": "📚 10"
+            },
+            {
+                "label": "📕 11"
+            },
+            {
+                "label": "📗 12"
+            },
+            {
+                "label": "📘 13"
+            },
+            {
+                "label": "📙 14"
+            },
+            {
+                "label": "📔 15"
+            },
+            {
+                "label": "📓 16"
+            }
+        ]
+    },
+    "style": {
+        "stroke": "#8e44ad",
+        "strokeWidth": 3,
+        "fill": "rgba(155, 89, 182, 0.1)",
+        "background": "#f8f9fa"
+    },
+    "output": {
+        "width": 1024,
+        "height": 1024,
+        "format": "both"
+    }
+}

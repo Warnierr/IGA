@@ -83,14 +83,41 @@ export const VennSchema = z.object({
     overlaps: z.record(z.string()), // { "A,B": "Label" }
 });
 
+export const GridSchema = z.object({
+    rows: z.number().int().min(1),
+    cols: z.number().int().min(1),
+    cellWidth: z.number().min(0).optional(),
+    cellHeight: z.number().min(0).optional(),
+    spacing: z.number().min(0).default(10),
+    items: z.array(z.object({
+        label: z.string(),
+        style: z.record(z.any()).optional(),
+    })).optional(),
+});
+
+export const SpiralSchema = z.object({
+    type: z.enum(['archimedean', 'logarithmic']).default('archimedean'),
+    count: z.number().int().min(1),
+    a: z.number().default(0), // start radius
+    b: z.number().default(20), // growth factor (gap for archimedean)
+    startAngle: z.number().default(0),
+    turns: z.number().default(2),
+    items: z.array(z.object({
+        label: z.string(),
+        rotation: z.boolean().default(false), // align with tangent
+    })).optional(),
+});
+
 export const SceneSpecSchema = z.object({
-    type: z.enum(['circle', 'grid', 'axis', 'compass', 'radar', 'timeline', 'clock', 'venn']),
+    type: z.enum(['circle', 'grid', 'axis', 'compass', 'radar', 'timeline', 'clock', 'venn', 'spiral']),
     id: z.string(),
     geometry: GeometrySchema,
     segments: SegmentsSchema.optional(),
     labels: LabelsSchema.optional(),
     clock: ClockSchema.optional(),
     venn: VennSchema.optional(),
+    grid: GridSchema.optional(),
+    spiral: SpiralSchema.optional(),
     style: StyleSchema.optional(),
     output: OutputSchema.optional(),
 });
@@ -109,6 +136,8 @@ export type Labels = z.infer<typeof LabelsSchema>;
 export type HandStyle = z.infer<typeof HandStyleSchema>;
 export type Clock = z.infer<typeof ClockSchema>;
 export type Venn = z.infer<typeof VennSchema>;
+export type Grid = z.infer<typeof GridSchema>;
+export type Spiral = z.infer<typeof SpiralSchema>;
 export type SceneSpec = z.infer<typeof SceneSpecSchema>;
 
 // ============================================================================
@@ -124,14 +153,6 @@ export interface CircleSpec extends SceneSpec {
         radius: number;
     };
     segments: Segments;
-}
-
-export interface GridSpec extends SceneSpec {
-    type: 'grid';
-    geometry: {
-        width: number;
-        height: number;
-    };
 }
 
 export interface ClockSpec extends SceneSpec {
@@ -151,6 +172,24 @@ export interface VennSpec extends SceneSpec {
         radius: number; // radius of each circle
     };
     venn: Venn;
+}
+
+export interface GridSpec extends SceneSpec {
+    type: 'grid';
+    geometry: {
+        center?: Point;
+        width: number;
+        height: number;
+    };
+    grid: Grid;
+}
+
+export interface SpiralSpec extends SceneSpec {
+    type: 'spiral';
+    geometry: {
+        center: Point;
+    };
+    spiral: Spiral;
 }
 
 // ============================================================================
@@ -201,6 +240,20 @@ export function isClockSpec(spec: SceneSpec): spec is ClockSpec {
  */
 export function isVennSpec(spec: SceneSpec): spec is VennSpec {
     return spec.type === 'venn';
+}
+
+/**
+ * Check if spec is a grid type
+ */
+export function isGridSpec(spec: SceneSpec): spec is GridSpec {
+    return spec.type === 'grid';
+}
+
+/**
+ * Check if spec is a spiral type
+ */
+export function isSpiralSpec(spec: SceneSpec): spec is SpiralSpec {
+    return spec.type === 'spiral';
 }
 
 // ============================================================================

@@ -223,19 +223,19 @@ export function calculateHandAngles(time: string): {
  * @returns Array of 3 center points for the circles
  */
 export function calculateVennCentroids(center: Point, radius: number): Point[] {
-  // For a 3-circle Venn with optimal overlap, we use an equilateral triangle
-  // The circles are positioned so they overlap by approximately 1/3 of their diameter
-  
-  // Distance from diagram center to each circle center
-  // For good overlap: distance ≈ 0.6 * radius
-  const offset = radius * 0.6;
-  
-  // Three circles at 120° intervals, starting at top
-  const angles = [-90, 30, 150]; // degrees
-  
-  return angles.map(angle => 
-    polarToCartesian(center, { radius: offset, angle })
-  );
+    // For a 3-circle Venn with optimal overlap, we use an equilateral triangle
+    // The circles are positioned so they overlap by approximately 1/3 of their diameter
+
+    // Distance from diagram center to each circle center
+    // For good overlap: distance ≈ 0.6 * radius
+    const offset = radius * 0.6;
+
+    // Three circles at 120° intervals, starting at top
+    const angles = [-90, 30, 150]; // degrees
+
+    return angles.map(angle =>
+        polarToCartesian(center, { radius: offset, angle })
+    );
 }
 
 /**
@@ -248,47 +248,47 @@ export function calculateVennCentroids(center: Point, radius: number): Point[] {
  * @returns Array of intersection points (0, 1, or 2 points)
  */
 export function circleIntersections(
-  c1: Point,
-  r1: number,
-  c2: Point,
-  r2: number
+    c1: Point,
+    r1: number,
+    c2: Point,
+    r2: number
 ): Point[] {
-  const dx = c2.x - c1.x;
-  const dy = c2.y - c1.y;
-  const d = Math.sqrt(dx * dx + dy * dy);
-  
-  // No intersection
-  if (d > r1 + r2 || d < Math.abs(r1 - r2) || d === 0) {
-    return [];
-  }
-  
-  // One circle contains the other
-  if (d + Math.min(r1, r2) === Math.max(r1, r2)) {
-    return [];
-  }
-  
-  const a = (r1 * r1 - r2 * r2 + d * d) / (2 * d);
-  const h = Math.sqrt(r1 * r1 - a * a);
-  
-  const px = c1.x + (dx * a) / d;
-  const py = c1.y + (dy * a) / d;
-  
-  const p1: Point = {
-    x: px + (h * dy) / d,
-    y: py - (h * dx) / d,
-  };
-  
-  const p2: Point = {
-    x: px - (h * dy) / d,
-    y: py + (h * dx) / d,
-  };
-  
-  // If h is very small, it's essentially one point
-  if (h < 0.0001) {
-    return [{ x: px, y: py }];
-  }
-  
-  return [p1, p2];
+    const dx = c2.x - c1.x;
+    const dy = c2.y - c1.y;
+    const d = Math.sqrt(dx * dx + dy * dy);
+
+    // No intersection
+    if (d > r1 + r2 || d < Math.abs(r1 - r2) || d === 0) {
+        return [];
+    }
+
+    // One circle contains the other
+    if (d + Math.min(r1, r2) === Math.max(r1, r2)) {
+        return [];
+    }
+
+    const a = (r1 * r1 - r2 * r2 + d * d) / (2 * d);
+    const h = Math.sqrt(r1 * r1 - a * a);
+
+    const px = c1.x + (dx * a) / d;
+    const py = c1.y + (dy * a) / d;
+
+    const p1: Point = {
+        x: px + (h * dy) / d,
+        y: py - (h * dx) / d,
+    };
+
+    const p2: Point = {
+        x: px - (h * dy) / d,
+        y: py + (h * dx) / d,
+    };
+
+    // If h is very small, it's essentially one point
+    if (h < 0.0001) {
+        return [{ x: px, y: py }];
+    }
+
+    return [p1, p2];
 }
 
 /**
@@ -297,19 +297,103 @@ export function circleIntersections(
  * For Venn diagram label placement
  */
 export function calculateIntersectionCentroid(points: Point[]): Point {
-  if (points.length === 0) {
-    return { x: 0, y: 0 };
-  }
-  
-  const sum = points.reduce(
-    (acc, p) => ({ x: acc.x + p.x, y: acc.y + p.y }),
-    { x: 0, y: 0 }
-  );
-  
-  return {
-    x: sum.x / points.length,
-    y: sum.y / points.length,
-  };
+    if (points.length === 0) {
+        return { x: 0, y: 0 };
+    }
+
+    const sum = points.reduce(
+        (acc, p) => ({ x: acc.x + p.x, y: acc.y + p.y }),
+        { x: 0, y: 0 }
+    );
+
+    return {
+        x: sum.x / points.length,
+        y: sum.y / points.length,
+    };
+}
+
+/**
+ * Calculate grid positions for a rows×cols layout
+ * 
+ * @param topLeft - Top-left corner of the grid
+ * @param rows - Number of rows
+ * @param cols - Number of columns
+ * @param cellWidth - Width of each cell
+ * @param cellHeight - Height of each cell
+ * @param spacing - Spacing between cells
+ * @returns Array of center points for each cell (row-major order)
+ */
+export function calculateGridPositions(
+    topLeft: Point,
+    rows: number,
+    cols: number,
+    cellWidth: number,
+    cellHeight: number,
+    spacing: number = 0
+): Point[] {
+    const positions: Point[] = [];
+
+    for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+            positions.push({
+                x: topLeft.x + col * (cellWidth + spacing) + cellWidth / 2,
+                y: topLeft.y + row * (cellHeight + spacing) + cellHeight / 2,
+            });
+        }
+    }
+
+    return positions;
+}
+
+/**
+ * Calculate positions along a spiral
+ * 
+ * Supports Archimedean (r = a + bθ) and Logarithmic (r = a * e^(bθ)) spirals
+ * 
+ * @param center - Center of the spiral
+ * @param count - Number of points
+ * @param type - 'archimedean' or 'logarithmic'
+ * @param a - Start radius or offset
+ * @param b - Growth factor
+ * @param startAngle - Starting angle in degrees
+ * @param turns - Total number of turns (rotations)
+ * @returns Array of points along the spiral
+ */
+export function calculateSpiralPositions(
+    center: Point,
+    count: number,
+    type: 'archimedean' | 'logarithmic',
+    a: number,
+    b: number,
+    startAngle: number = 0,
+    turns: number = 2
+): Point[] {
+    const points: Point[] = [];
+    const totalAngle = turns * 2 * Math.PI; // Total rotation in radians
+    const startRad = (startAngle * Math.PI) / 180;
+
+    for (let i = 0; i < count; i++) {
+        // Progress t goes from 0 to 1
+        const t = i / (count - 1 || 1);
+        const theta = startRad + t * totalAngle;
+
+        let radius = 0;
+        if (type === 'archimedean') {
+            // r = a + b * theta
+            radius = a + b * theta;
+        } else {
+            // r = a * e^(b * theta)
+            // Note: b should be small for log spiral (e.g., 0.1 - 0.3)
+            radius = a * Math.exp(b * theta);
+        }
+
+        points.push({
+            x: center.x + radius * Math.cos(theta),
+            y: center.y + radius * Math.sin(theta)
+        });
+    }
+
+    return points;
 }
 
 /**

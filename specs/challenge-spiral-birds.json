@@ -1,0 +1,79 @@
+{
+    "type": "spiral",
+    "id": "challenge-spiral-birds",
+    "geometry": {
+        "center": {
+            "x": 512,
+            "y": 512
+        }
+    },
+    "spiral": {
+        "type": "logarithmic",
+        "count": 12,
+        "a": 20,
+        "b": 0.35,
+        "startAngle": 0,
+        "turns": 2.5,
+        "items": [
+            {
+                "label": "🐦",
+                "rotation": true
+            },
+            {
+                "label": "🐦",
+                "rotation": true
+            },
+            {
+                "label": "🐦",
+                "rotation": true
+            },
+            {
+                "label": "🐦",
+                "rotation": true
+            },
+            {
+                "label": "🐦",
+                "rotation": true
+            },
+            {
+                "label": "🐦",
+                "rotation": true
+            },
+            {
+                "label": "🐦",
+                "rotation": true
+            },
+            {
+                "label": "🐦",
+                "rotation": true
+            },
+            {
+                "label": "🐦",
+                "rotation": true
+            },
+            {
+                "label": "🐦",
+                "rotation": true
+            },
+            {
+                "label": "🐦",
+                "rotation": true
+            },
+            {
+                "label": "🐦",
+                "rotation": true
+            }
+        ]
+    },
+    "style": {
+        "stroke": "#3498db",
+        "strokeWidth": 2,
+        "fill": "none",
+        "background": "#eafaf1"
+    },
+    "output": {
+        "width": 1024,
+        "height": 1024,
+        "format": "both"
+    }
+}

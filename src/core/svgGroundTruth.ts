@@ -18,18 +18,24 @@ import {
     calculateVennCentroids,
     circleIntersections,
     calculateIntersectionCentroid,
+    calculateGridPositions,
+    calculateSpiralPositions,
 } from './geometry.js';
 import {
     type SceneSpec,
     type CircleSpec,
     type ClockSpec,
     type VennSpec,
+    type GridSpec,
+    type SpiralSpec,
     type HandStyle,
     type TextStyle,
     type Style,
     isCircleSpec,
     isClockSpec,
     isVennSpec,
+    isGridSpec,
+    isSpiralSpec,
     generateLabelValues,
     applyDefaults,
     DEFAULT_TEXT_STYLE,
@@ -98,6 +104,14 @@ export function generateSVG(
         }));
     } else if (isVennSpec(fullSpec)) {
         parts.push(...generateVennSVG(fullSpec as VennSpec, {
+            includeLabels,
+        }));
+    } else if (isGridSpec(fullSpec)) {
+        parts.push(...generateGridSVG(fullSpec as GridSpec, {
+            includeLabels,
+        }));
+    } else if (isSpiralSpec(fullSpec)) {
+        parts.push(...generateSpiralSVG(fullSpec as SpiralSpec, {
             includeLabels,
         }));
     }
@@ -381,6 +395,165 @@ function generateVennSVG(
             parts.push(`    </text>`);
         }
 
+        parts.push(`  </g>`);
+    }
+
+    return parts;
+}
+
+// ============================================================================
+// GRID GENERATOR
+// ============================================================================
+
+function generateGridSVG(
+    spec: GridSpec,
+    options: { includeLabels: boolean }
+): string[] {
+    const parts: string[] = [];
+    const { geometry, grid, style = DEFAULT_STYLE } = spec;
+    const width = geometry.width;
+    const height = geometry.height;
+
+    // Calculate cell dimensions
+    const cellWidth = grid.cellWidth || (width - (grid.cols - 1) * grid.spacing) / grid.cols;
+    const cellHeight = grid.cellHeight || (height - (grid.rows - 1) * grid.spacing) / grid.rows;
+
+    // Calculate top-left corner (centered if center is provided)
+    const center = geometry.center || { x: width / 2, y: height / 2 };
+    const topLeft = {
+        x: center.x - width / 2,
+        y: center.y - height / 2,
+    };
+
+    // Calculate grid positions
+    const positions = calculateGridPositions(
+        topLeft,
+        grid.rows,
+        grid.cols,
+        cellWidth,
+        cellHeight,
+        grid.spacing
+    );
+
+    const itemCount = grid.rows * grid.cols;
+
+    parts.push(`  <!-- Grid: ${grid.rows}×${grid.cols} -->`);
+
+    // Draw cells
+    parts.push(`  <g id="grid-cells">`);
+    for (let i = 0; i < itemCount; i++) {
+        const row = Math.floor(i / grid.cols);
+        const col = i % grid.cols;
+        const x = topLeft.x + col * (cellWidth + grid.spacing);
+        const y = topLeft.y + row * (cellHeight + grid.spacing);
+
+        parts.push(`    <rect x="${x.toFixed(2)}" y="${y.toFixed(2)}" width="${cellWidth.toFixed(2)}" height="${cellHeight.toFixed(2)}" stroke="${style.stroke}" stroke-width="${style.strokeWidth}" fill="${style.fill}"/>`);
+    }
+    parts.push(`  </g>`);
+
+    // Add labels if provided
+    if (options.includeLabels && grid.items) {
+        parts.push(`  <!-- Grid Labels -->`);
+        parts.push(`  <g id="grid-labels" font-family="Arial, sans-serif" font-size="16" font-weight="normal" fill="#2c3e50">`);
+
+        const itemsToRender = Math.min(grid.items.length, itemCount);
+        for (let i = 0; i < itemsToRender; i++) {
+            const pos = positions[i];
+            const item = grid.items[i];
+
+            parts.push(`    <text x="${pos.x.toFixed(2)}" y="${pos.y.toFixed(2)}" text-anchor="middle" dy="0.35em">`);
+            parts.push(`      ${escapeXml(item.label)}`);
+            parts.push(`    </text>`);
+        }
+
+        parts.push(`  </g>`);
+    }
+
+    return parts;
+}
+
+// ============================================================================
+// SPIRAL GENERATOR
+// ============================================================================
+
+function generateSpiralSVG(
+    spec: SpiralSpec,
+    options: { includeLabels: boolean }
+): string[] {
+    const parts: string[] = [];
+    const { geometry, spiral, style = DEFAULT_STYLE } = spec;
+
+    // Calculate spiral positions
+    const positions = calculateSpiralPositions(
+        geometry.center,
+        spiral.count,
+        spiral.type,
+        spiral.a,
+        spiral.b,
+        spiral.startAngle,
+        spiral.turns
+    );
+
+    parts.push(`  <!-- Spiral: ${spiral.type} (${spiral.count} items) -->`);
+
+    // Draw spiral path (guide line)
+    // To make it smooth, we calculate more points for the line
+    const guidePoints = calculateSpiralPositions(
+        geometry.center,
+        100 * spiral.turns, // Higher resolution for smooth curve
+        spiral.type,
+        spiral.a,
+        spiral.b,
+        spiral.startAngle,
+        spiral.turns
+    );
+
+    // Convert points to path data
+    if (guidePoints.length > 0) {
+        const d = `M ${guidePoints[0].x.toFixed(2)} ${guidePoints[0].y.toFixed(2)} ` +
+            guidePoints.slice(1).map(p => `L ${p.x.toFixed(2)} ${p.y.toFixed(2)}`).join(' ');
+
+        parts.push(`  <path d="${d}" stroke="${style.stroke}" stroke-width="${style.strokeWidth}" fill="none" opacity="0.5"/>`);
+    }
+
+    // Add items/labels
+    if (spiral.items) {
+        parts.push(`  <g id="spiral-items" font-family="Arial, sans-serif" font-size="16" font-weight="normal" fill="#2c3e50">`);
+
+        const itemsToRender = Math.min(spiral.items.length, spiral.count);
+        for (let i = 0; i < itemsToRender; i++) {
+            const pos = positions[i];
+            const item = spiral.items[i];
+
+            // If rotation is enabled, calculate tangent angle
+            let transform = '';
+            if (item.rotation) {
+                // Approximate tangent using next point (or previous for last point)
+                const nextPos = (i < positions.length - 1) ? positions[i + 1] : pos;
+                const prevPos = (i > 0) ? positions[i - 1] : pos;
+
+                let angle = 0;
+                if (i < positions.length - 1) {
+                    angle = Math.atan2(nextPos.y - pos.y, nextPos.x - pos.x) * 180 / Math.PI;
+                } else {
+                    angle = Math.atan2(pos.y - prevPos.y, pos.x - prevPos.x) * 180 / Math.PI;
+                }
+
+                transform = ` transform="rotate(${angle.toFixed(2)} ${pos.x.toFixed(2)} ${pos.y.toFixed(2)})"`;
+            }
+
+            parts.push(`    <text x="${pos.x.toFixed(2)}" y="${pos.y.toFixed(2)}" text-anchor="middle" dy="0.35em"${transform}>`);
+            parts.push(`      ${escapeXml(item.label)}`);
+            parts.push(`    </text>`);
+        }
+
+        parts.push(`  </g>`);
+    } else {
+        // Draw points if no items defined
+        parts.push(`  <g id="spiral-points">`);
+        for (const pos of positions) {
+            parts.push(`    <circle cx="${pos.x.toFixed(2)}" cy="${pos.y.toFixed(2)}" r="4" fill="${style.stroke}"/>`);
+        }
         parts.push(`  </g>`);
     }
 

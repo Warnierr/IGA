@@ -1,0 +1,28 @@
+{
+    "type": "grid",
+    "id": "grid-6x6-numbers",
+    "geometry": {
+        "center": {
+            "x": 512,
+            "y": 512
+        },
+        "width": 900,
+        "height": 900
+    },
+    "grid": {
+        "rows": 6,
+        "cols": 6,
+        "spacing": 15
+    },
+    "style": {
+        "stroke": "#3498db",
+        "strokeWidth": 2,
+        "fill": "rgba(52, 152, 219, 0.05)",
+        "background": "#ffffff"
+    },
+    "output": {
+        "width": 1024,
+        "height": 1024,
+        "format": "both"
+    }
+}
