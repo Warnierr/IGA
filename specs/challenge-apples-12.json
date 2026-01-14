@@ -1,0 +1,51 @@
+{
+    "type": "circle",
+    "id": "challenge-1-1-apples",
+    "geometry": {
+        "center": {
+            "x": 512,
+            "y": 512
+        },
+        "radius": 350
+    },
+    "segments": {
+        "count": 12,
+        "startAngle": -90,
+        "direction": "cw"
+    },
+    "labels": {
+        "values": [
+            "🍎 1",
+            "🍎 2",
+            "🍎 3",
+            "🍎 4",
+            "🍎 5",
+            "🍎 6",
+            "🍎 7",
+            "🍎 8",
+            "🍎 9",
+            "🍎 10",
+            "🍎 11",
+            "🍎 12"
+        ],
+        "style": {
+            "fontFamily": "Arial, sans-serif",
+            "fontSize": 28,
+            "fontWeight": "bold",
+            "fill": "#c0392b"
+        },
+        "placement": "outside",
+        "offsetRadius": 1.15
+    },
+    "style": {
+        "stroke": "#27ae60",
+        "strokeWidth": 8,
+        "fill": "none",
+        "background": "#e8f5e9"
+    },
+    "output": {
+        "width": 1024,
+        "height": 1024,
+        "format": "both"
+    }
+}

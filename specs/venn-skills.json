@@ -1,0 +1,40 @@
+{
+    "type": "venn",
+    "id": "venn-skills",
+    "geometry": {
+        "center": {
+            "x": 512,
+            "y": 512
+        },
+        "radius": 220
+    },
+    "venn": {
+        "sets": [
+            "Technical",
+            "Creative",
+            "Business"
+        ],
+        "setColors": {
+            "Technical": "rgba(41, 128, 185, 0.35)",
+            "Creative": "rgba(155, 89, 182, 0.35)",
+            "Business": "rgba(22, 160, 133, 0.35)"
+        },
+        "overlaps": {
+            "Technical,Creative": "Product Design",
+            "Creative,Business": "Marketing",
+            "Technical,Business": "Project Mgmt",
+            "Technical,Creative,Business": "Entrepreneur"
+        }
+    },
+    "style": {
+        "stroke": "#2c3e50",
+        "strokeWidth": 3,
+        "fill": "rgba(255, 255, 255, 0.9)",
+        "background": "#ecf0f1"
+    },
+    "output": {
+        "width": 1024,
+        "height": 1024,
+        "format": "both"
+    }
+}

@@ -1,0 +1,55 @@
+{
+    "type": "circle",
+    "id": "compass-16",
+    "geometry": {
+        "center": {
+            "x": 512,
+            "y": 512
+        },
+        "radius": 400
+    },
+    "segments": {
+        "count": 16,
+        "startAngle": -90,
+        "direction": "cw"
+    },
+    "labels": {
+        "values": [
+            "N",
+            "NNE",
+            "NE",
+            "ENE",
+            "E",
+            "ESE",
+            "SE",
+            "SSE",
+            "S",
+            "SSW",
+            "SW",
+            "WSW",
+            "W",
+            "WNW",
+            "NW",
+            "NNW"
+        ],
+        "style": {
+            "fontFamily": "Georgia, serif",
+            "fontSize": 24,
+            "fontWeight": "bold",
+            "fill": "#2c3e50"
+        },
+        "placement": "outside",
+        "offsetRadius": 1.18
+    },
+    "style": {
+        "stroke": "#34495e",
+        "strokeWidth": 4,
+        "fill": "none",
+        "background": "#ecf0f1"
+    },
+    "output": {
+        "width": 1024,
+        "height": 1024,
+        "format": "both"
+    }
+}

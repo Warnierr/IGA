@@ -1,0 +1,38 @@
+{
+    "type": "circle",
+    "id": "circle-100-extreme",
+    "geometry": {
+        "center": {
+            "x": 512,
+            "y": 512
+        },
+        "radius": 450
+    },
+    "segments": {
+        "count": 100,
+        "startAngle": 0,
+        "direction": "cw"
+    },
+    "labels": {
+        "values": "numeric",
+        "style": {
+            "fontFamily": "Consolas, monospace",
+            "fontSize": 10,
+            "fontWeight": "normal",
+            "fill": "#7f8c8d"
+        },
+        "placement": "outside",
+        "offsetRadius": 1.08
+    },
+    "style": {
+        "stroke": "#95a5a6",
+        "strokeWidth": 1,
+        "fill": "none",
+        "background": "#ffffff"
+    },
+    "output": {
+        "width": 1024,
+        "height": 1024,
+        "format": "both"
+    }
+}

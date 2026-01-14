@@ -1,0 +1,44 @@
+{
+    "type": "circle",
+    "id": "pentagon-regular",
+    "geometry": {
+        "center": {
+            "x": 512,
+            "y": 512
+        },
+        "radius": 350
+    },
+    "segments": {
+        "count": 5,
+        "startAngle": -90,
+        "direction": "cw"
+    },
+    "labels": {
+        "values": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5"
+        ],
+        "style": {
+            "fontFamily": "Inter, sans-serif",
+            "fontSize": 48,
+            "fontWeight": "bold",
+            "fill": "#e74c3c"
+        },
+        "placement": "outside",
+        "offsetRadius": 1.25
+    },
+    "style": {
+        "stroke": "#3498db",
+        "strokeWidth": 6,
+        "fill": "rgba(52, 152, 219, 0.1)",
+        "background": "#ffffff"
+    },
+    "output": {
+        "width": 1024,
+        "height": 1024,
+        "format": "both"
+    }
+}
