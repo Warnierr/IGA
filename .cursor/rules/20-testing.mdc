@@ -1,0 +1,75 @@
+---
+description: Testing & verification discipline for Precision Overlay
+---
+
+# Testing Rules
+
+## Mandatory Test Coverage
+
+### Geometry Module
+- **Unit test every function**
+  - `polarToCartesian`: Test all quadrants (0°, 90°, 180°, 270°)
+  - `calculateSegmentPositions`: Test n=4, n=12, n=30
+  - Direction: Test both CW and CCW
+  - StartAngle: Test 0°, 45°, 90°, custom angles
+
+### Rendering Module
+- **Snapshot testing**
+  - Generate SVG, compare hash to baseline
+  - Pixel-diff tolerance: 0.1%
+  - Save baseline in `tests/fixtures/`
+
+### Verification Module
+- **Metric accuracy tests**
+  - SSIM on known identical images = 1.0
+  - SSIM on known different images < 0.9
+  - pHash distance on identical = 0
+  - pHash distance on similar ≤ 5
+
+### Circle Detection
+- **Never assume it works**
+  - Add fixture images in `tests/fixtures/circles/`
+  - Test edge cases:
+    - Off-center circles
+    - Multiple circles (should pick largest)
+    - No circle (should return null)
+    - Noisy backgrounds
+
+## Test File Naming
+
+```
+tests/
+  geometry.test.ts      # Unit tests for geometry
+  render.test.ts        # Snapshot tests for rendering
+  verify.test.ts        # Metric validation tests
+  cli.test.ts           # CLI integration tests
+  fixtures/
+    circles/
+      perfect_512.png   # Known good circle
+      off_center.png    # Edge case
+      noisy.png         # Stress test
+    snapshots/
+      circle30.svg      # SVG baseline
+```
+
+## Running Tests
+
+```bash
+# All tests
+npm test
+
+# Specific module
+npm test -- --grep "geometry"
+
+# Update snapshots (when intentionally changing output)
+npm test -- --updateSnapshot
+
+# Coverage report
+npm test -- --coverage
+```
+
+## CI Requirements
+
+- All tests must pass before merge
+- Code coverage ≥ 80%
+- No skipped tests without issue reference

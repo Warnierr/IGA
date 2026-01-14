@@ -1,0 +1,40 @@
+{
+    "type": "venn",
+    "id": "venn-data-science",
+    "geometry": {
+        "center": {
+            "x": 512,
+            "y": 512
+        },
+        "radius": 200
+    },
+    "venn": {
+        "sets": [
+            "Computer Science",
+            "Mathematics",
+            "Domain Expertise"
+        ],
+        "setColors": {
+            "Computer Science": "rgba(52, 152, 219, 0.3)",
+            "Mathematics": "rgba(231, 76, 60, 0.3)",
+            "Domain Expertise": "rgba(46, 204, 113, 0.3)"
+        },
+        "overlaps": {
+            "Computer Science,Mathematics": "Machine Learning",
+            "Computer Science,Domain Expertise": "Software Engineering",
+            "Mathematics,Domain Expertise": "Research & Analytics",
+            "Computer Science,Mathematics,Domain Expertise": "Data Science"
+        }
+    },
+    "style": {
+        "stroke": "#2c3e50",
+        "strokeWidth": 2,
+        "fill": "rgba(255, 255, 255, 0.8)",
+        "background": "#ffffff"
+    },
+    "output": {
+        "width": 1024,
+        "height": 1024,
+        "format": "both"
+    }
+}

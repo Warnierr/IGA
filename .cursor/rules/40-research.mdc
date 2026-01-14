@@ -1,0 +1,86 @@
+---
+description: Research ingestion protocol for external techniques
+---
+
+# Research Protocol
+
+## When to Document Research
+
+Document in `docs/research.md` when:
+- Adopting external library/technique
+- Evaluating competing approaches
+- Referencing academic papers
+- Using code from GitHub/HuggingFace
+
+## Entry Format
+
+```markdown
+| Technique | Source | Capability | Module Mapping | Decision |
+|-----------|--------|------------|----------------|----------|
+| **Name** | [Link](url) | What it does | Where it fits | adopt/postpone/reject |
+```
+
+## Decision Criteria
+
+### Adopt
+- Directly solves a roadmap item
+- Well-maintained (recent commits, good docs)
+- License compatible (MIT, Apache, BSD)
+- Reasonable dependency footprint
+
+### Postpone
+- Interesting but not critical path
+- Requires significant integration work
+- Dependencies conflict
+- "Nice to have" for future milestone
+
+### Reject
+- Doesn't fit architecture
+- Unmaintained or abandoned
+- License issues
+- Better alternatives exist
+
+## Research Sources
+
+### Primary (High Signal)
+- arXiv/OpenReview papers (CVPR, ICCV, NeurIPS)
+- GitHub trending in ML/CV
+- HuggingFace Spaces demos
+- Official library documentation
+
+### Secondary (Verify Claims)
+- Blog posts (Medium, Dev.to)
+- Stack Overflow answers
+- YouTube tutorials
+- Reddit discussions
+
+## Integration Checklist
+
+When adopting external code:
+
+- [ ] License verified
+- [ ] Documented in research.md
+- [ ] Minimal example tested locally
+- [ ] Dependencies added to package.json
+- [ ] Import/usage documented in code comments
+
+## Research Sessions
+
+Before starting a major milestone:
+
+1. **Search** for existing solutions (30 min)
+2. **Evaluate** top 3 options against criteria
+3. **Document** findings in research.md
+4. **Decide** adopt/postpone/reject
+5. **Proceed** with implementation
+
+## Model Recommendations
+
+Based on research:
+
+| Task | Model | Rationale |
+|------|-------|-----------|
+| Plan writing | Claude Sonnet 4.5 | Balance speed/quality |
+| Deep research | Claude Opus 4.5 | Synthesis + consolidation |
+| Code implementation | Claude Sonnet 4.5 | Agent-optimized |
+| Image generation | Gemini 3 Pro | Google ecosystem |

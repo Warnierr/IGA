@@ -1,0 +1,70 @@
+{
+    "type": "clock",
+    "id": "clock-3h27",
+    "geometry": {
+        "center": {
+            "x": 512,
+            "y": 512
+        },
+        "radius": 400
+    },
+    "clock": {
+        "time": "3:27:15",
+        "hands": {
+            "hour": {
+                "width": 18,
+                "length": 0.45,
+                "color": "#1a1a2e"
+            },
+            "minute": {
+                "width": 12,
+                "length": 0.7,
+                "color": "#16213e"
+            },
+            "second": {
+                "width": 5,
+                "length": 0.8,
+                "color": "#c0392b"
+            }
+        }
+    },
+    "segments": {
+        "count": 12,
+        "startAngle": -90,
+        "direction": "cw"
+    },
+    "labels": {
+        "values": [
+            "12",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11"
+        ],
+        "style": {
+            "fontFamily": "Inter, sans-serif",
+            "fontSize": 36,
+            "fontWeight": "bold",
+            "fill": "#1a1a2e"
+        },
+        "offsetRadius": 0.75
+    },
+    "style": {
+        "stroke": "#2c3e50",
+        "strokeWidth": 4,
+        "fill": "#f8f9fa",
+        "background": "#ffffff"
+    },
+    "output": {
+        "width": 1024,
+        "height": 1024,
+        "format": "both"
+    }
+}

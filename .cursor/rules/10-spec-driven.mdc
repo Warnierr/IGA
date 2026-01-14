@@ -1,0 +1,72 @@
+---
+description: Spec-driven workflow for Precision Overlay Engine
+---
+
+# Spec-Driven Contract
+
+## Non-negotiables
+
+1. **No code until docs exist**
+   - `docs/spec.md` must define the feature
+   - `docs/roadmap.md` must have the checkbox item
+   - Update both BEFORE implementing
+
+2. **Every change maps to roadmap**
+   - Each commit references a roadmap item (e.g., "A1", "B3")
+   - No orphan changes
+
+3. **Unclear requirements?**
+   - Propose 2-3 interpretations
+   - Pick the most conservative
+   - Document the choice in spec.md
+   - Proceed without blocking
+
+## Deliverables per Task
+
+For each roadmap item:
+
+1. **Update spec** (1-5 bullets)
+   - What does this item produce?
+   - What interfaces/contracts are affected?
+
+2. **Implement minimal code**
+   - Smallest working version
+   - No premature optimization
+
+3. **Add/extend tests**
+   - Unit test for logic
+   - Integration test for pipelines
+
+4. **Update progress**
+   - Tick roadmap checkbox
+   - Update `docs/progress.json`
+
+## Definition of Done (DoD)
+
+- [ ] Tests pass locally
+- [ ] `specs/circle30.json` renders correctly (if applicable)
+- [ ] `examples/circle30/report.json` updated (if applicable)
+- [ ] Roadmap item checked
+- [ ] Progress.json reflects new state
+
+## Commit Message Format
+
+```
+[MILESTONE-ITEM] Brief description
+
+- Detail 1
+- Detail 2
+
+Refs: roadmap.md#A1
+```
+
+Example:
+```
+[A2] Implement geometry calculations
+
+- Added polarToCartesian function
+- Added calculateSegmentPositions
+- Unit tests for both
+
+Refs: roadmap.md#A2
+```

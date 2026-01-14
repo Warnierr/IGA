@@ -1,0 +1,93 @@
+---
+description: Quantified progress tracking without dates
+---
+
+# Progress Rules
+
+## Files to Maintain
+
+1. **`docs/roadmap.md`** - Checkbox-based tracking
+2. **`docs/progress.json`** - Quantified metrics
+
+## After Each Change
+
+### 1. Update Roadmap Checkboxes
+
+```markdown
+# Before
+- [ ] **A1**: Define SceneSpec JSON format
+
+# During work
+- [/] **A1**: Define SceneSpec JSON format
+
+# After completion
+- [x] **A1**: Define SceneSpec JSON format
+```
+
+### 2. Update Progress JSON
+
+```json
+{
+  "totalItems": 20,
+  "doneItems": 1,
+  "percentDone": 5,
+  "milestones": {
+    "A": {
+      "total": 5,
+      "done": 1,
+      "inProgress": 0,
+      "percentDone": 20
+    }
+  },
+  "currentFocus": "A2",
+  "lastUpdated": "2026-01-14T22:00:00Z"
+}
+```
+
+### 3. Write Changelog Entry
+
+In `docs/roadmap.md`:
+
+```markdown
+## Changelog
+
+| Change | Milestone | Item |
+|--------|-----------|------|
+| Defined SceneSpec types and JSON schema | A | A1 |
+```
+
+## Progress Calculation
+
+```
+overall_percent = (done_items / total_items) * 100
+milestone_percent = (milestone_done / milestone_total) * 100
+```
+
+## Status Indicators
+
+| Symbol | Meaning |
+|--------|---------|
+| `[ ]` | Not started |
+| `[/]` | In progress |
+| `[x]` | Completed |
+| `[!]` | Blocked |
+
+## Reporting Frequency
+
+- Update after **every roadmap item completion**
+- Update `currentFocus` when starting new item
+- Add to `blockers[]` if stuck
+
+## No Temporal Estimates
+
+**DO NOT** add:
+- Time estimates
+- Deadlines
+- Sprint dates
+- "ETA" or "Expected by"
+
+**DO** track:
+- Items completed / total
+- Percentage progress
+- Current focus item
+- Blockers (if any)
