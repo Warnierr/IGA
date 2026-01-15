@@ -1,0 +1,68 @@
+{
+    "type": "mandala",
+    "id": "challenge-mandala-numbered",
+    "geometry": {
+        "center": {
+            "x": 512,
+            "y": 512
+        }
+    },
+    "mandala": {
+        "axes": 12,
+        "startAngle": 0,
+        "layers": [
+            {
+                "radius": 0,
+                "size": 40,
+                "count": 1,
+                "label": "1",
+                "rotation": false
+            },
+            {
+                "radius": 100,
+                "size": 30,
+                "labels": {
+                    "values": "numeric"
+                },
+                "rotation": true,
+                "offsetRotate": 0
+            },
+            {
+                "radius": 200,
+                "size": 30,
+                "labels": {
+                    "values": "alpha"
+                },
+                "rotation": true
+            },
+            {
+                "radius": 300,
+                "size": 30,
+                "labels": {
+                    "values": "roman"
+                },
+                "rotation": true,
+                "offsetRotate": 0
+            },
+            {
+                "radius": 400,
+                "size": 40,
+                "count": 12,
+                "label": "🌿",
+                "rotation": true,
+                "offsetRotate": 45
+            }
+        ]
+    },
+    "style": {
+        "stroke": "#2c3e50",
+        "strokeWidth": 2,
+        "fill": "none",
+        "background": "#ffffff"
+    },
+    "output": {
+        "width": 1024,
+        "height": 1024,
+        "format": "both"
+    }
+}

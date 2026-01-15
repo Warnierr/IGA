@@ -586,6 +586,19 @@ function generateMandalaSVG(
         const count = layer.count || mandala.axes;
         const angleStep = 360 / count;
 
+        // Determine label values for this layer
+        let labelValues: string[] = [];
+        if (layer.labels) {
+            // Numbered/Dynamic labels
+            labelValues = generateLabelValues(layer.labels, count);
+        } else if (layer.label) {
+            // Fixed label repeated
+            labelValues = Array(count).fill(layer.label);
+        } else {
+            // Fallback empty
+            labelValues = Array(count).fill('');
+        }
+
         for (let i = 0; i < count; i++) {
             const angle = mandala.startAngle + (i * angleStep);
 
@@ -598,23 +611,29 @@ function generateMandalaSVG(
             // Item rotation
             let transform = '';
             if (layer.rotation) {
-                // By default point outward (angle + 90 if 0 is top)
-                // But our polarToCartesian assumes 0 is right (East)
-                // To point OUTWARD from center:
+                // Point OUTWARD from center
                 const rotationAngle = angle + 90 + layer.offsetRotate;
                 transform = ` transform="rotate(${rotationAngle.toFixed(2)} ${pos.x.toFixed(2)} ${pos.y.toFixed(2)})"`;
             } else if (layer.offsetRotate !== 0) {
                 transform = ` transform="rotate(${layer.offsetRotate.toFixed(2)} ${pos.x.toFixed(2)} ${pos.y.toFixed(2)})"`;
             }
 
-            parts.push(`    <text x="${pos.x.toFixed(2)}" y="${pos.y.toFixed(2)}" 
-                text-anchor="middle" 
+            // Using layer specific font size or default style
+            const fontSize = layer.size;
+            const fill = layer.labels?.style?.fill || style.stroke || '#000000';
+            const fontFamily = layer.labels?.style?.fontFamily || 'Arial, sans-serif';
+            const fontWeight = layer.labels?.style?.fontWeight || 'normal';
+
+            parts.push(`    <text x="${pos.x.toFixed(2)}" y="${pos.y.toFixed(2)}"
+                text-anchor="middle"
                 dy="0.35em"
-                font-family="Arial, sans-serif" 
-                font-size="${layer.size}"
+                font-family="${fontFamily}"
+                font-size="${fontSize}"
+                font-weight="${fontWeight}"
+                fill="${fill}"
                 ${transform}
             >`);
-            parts.push(`      ${escapeXml(layer.label)}`);
+            parts.push(`      ${escapeXml(labelValues[i])}`);
             parts.push(`    </text>`);
         }
         parts.push(`  </g>`);

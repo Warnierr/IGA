@@ -114,10 +114,11 @@ export const MandalaSchema = z.object({
     layers: z.array(z.object({
         radius: z.number(), // Distance from center
         size: z.number().default(10), // Size of element
-        count: z.number().optional(), // If defined, can differ from axes count (but usually matches)
-        label: z.string(), // The shape/emoji/symbol
+        count: z.number().optional(), // If defined, can differ from axes count
+        label: z.string().optional(), // Fixed label (emoji/symbol)
+        labels: LabelsSchema.optional(), // Dynamic labels (numeric, alpha, etc)
         rotation: z.boolean().default(true), // Rotate with the axis?
-        offsetRotate: z.number().default(0), // Additional rotation of the item itself
+        offsetRotate: z.number().default(0), // Additional rotation
     })),
 });
 
