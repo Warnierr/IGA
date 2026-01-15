@@ -1,0 +1,68 @@
+{
+    "type": "mandala",
+    "id": "challenge-mandala-floral",
+    "geometry": {
+        "center": {
+            "x": 512,
+            "y": 512
+        }
+    },
+    "mandala": {
+        "axes": 12,
+        "startAngle": 0,
+        "layers": [
+            {
+                "radius": 0,
+                "size": 60,
+                "count": 1,
+                "label": "🕉️",
+                "rotation": false
+            },
+            {
+                "radius": 80,
+                "size": 30,
+                "label": "⭐",
+                "rotation": true,
+                "offsetRotate": 0
+            },
+            {
+                "radius": 150,
+                "size": 20,
+                "label": "⏺️",
+                "rotation": true
+            },
+            {
+                "radius": 240,
+                "size": 50,
+                "label": "🌸",
+                "rotation": true,
+                "offsetRotate": 0
+            },
+            {
+                "radius": 340,
+                "size": 30,
+                "count": 24,
+                "label": "🔹",
+                "rotation": true
+            },
+            {
+                "radius": 420,
+                "size": 60,
+                "label": "🌿",
+                "rotation": true,
+                "offsetRotate": 45
+            }
+        ]
+    },
+    "style": {
+        "stroke": "#8e44ad",
+        "strokeWidth": 2,
+        "fill": "none",
+        "background": "#fbfbfb"
+    },
+    "output": {
+        "width": 1024,
+        "height": 1024,
+        "format": "both"
+    }
+}

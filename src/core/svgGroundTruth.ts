@@ -28,6 +28,7 @@ import {
     type VennSpec,
     type GridSpec,
     type SpiralSpec,
+    type MandalaSpec,
     type HandStyle,
     type TextStyle,
     type Style,
@@ -36,6 +37,7 @@ import {
     isVennSpec,
     isGridSpec,
     isSpiralSpec,
+    isMandalaSpec,
     generateLabelValues,
     applyDefaults,
     DEFAULT_TEXT_STYLE,
@@ -114,6 +116,8 @@ export function generateSVG(
         parts.push(...generateSpiralSVG(fullSpec as SpiralSpec, {
             includeLabels,
         }));
+    } else if (isMandalaSpec(fullSpec)) {
+        parts.push(...generateMandalaSVG(fullSpec as MandalaSpec));
     }
 
     parts.push('</svg>');
@@ -556,6 +560,65 @@ function generateSpiralSVG(
         }
         parts.push(`  </g>`);
     }
+
+    return parts;
+}
+
+// ============================================================================
+// MANDALA GENERATOR
+// ============================================================================
+
+function generateMandalaSVG(
+    spec: MandalaSpec
+): string[] {
+    const parts: string[] = [];
+    const { geometry, mandala, style = DEFAULT_STYLE } = spec;
+    const center = geometry.center;
+
+    parts.push(`  <!-- Mandala: ${mandala.axes} axes -->`);
+
+    // Helper to calculate position for one item
+    // But for mandala, we use SVG transforms for precision symmetry!
+
+    mandala.layers.forEach((layer, layerIndex) => {
+        parts.push(`  <g id="layer-${layerIndex}">`);
+
+        const count = layer.count || mandala.axes;
+        const angleStep = 360 / count;
+
+        for (let i = 0; i < count; i++) {
+            const angle = mandala.startAngle + (i * angleStep);
+
+            // Calculate position using Polar to Cartesian
+            const pos = polarToCartesian(center, {
+                radius: layer.radius,
+                angle: angle
+            });
+
+            // Item rotation
+            let transform = '';
+            if (layer.rotation) {
+                // By default point outward (angle + 90 if 0 is top)
+                // But our polarToCartesian assumes 0 is right (East)
+                // To point OUTWARD from center:
+                const rotationAngle = angle + 90 + layer.offsetRotate;
+                transform = ` transform="rotate(${rotationAngle.toFixed(2)} ${pos.x.toFixed(2)} ${pos.y.toFixed(2)})"`;
+            } else if (layer.offsetRotate !== 0) {
+                transform = ` transform="rotate(${layer.offsetRotate.toFixed(2)} ${pos.x.toFixed(2)} ${pos.y.toFixed(2)})"`;
+            }
+
+            parts.push(`    <text x="${pos.x.toFixed(2)}" y="${pos.y.toFixed(2)}" 
+                text-anchor="middle" 
+                dy="0.35em"
+                font-family="Arial, sans-serif" 
+                font-size="${layer.size}"
+                ${transform}
+            >`);
+            parts.push(`      ${escapeXml(layer.label)}`);
+            parts.push(`    </text>`);
+        }
+        parts.push(`  </g>`);
+    });
 
     return parts;
 }

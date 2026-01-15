@@ -108,8 +108,21 @@ export const SpiralSchema = z.object({
     })).optional(),
 });
 
+export const MandalaSchema = z.object({
+    axes: z.number().int().min(3).default(12), // Number of symmetry axes
+    startAngle: z.number().default(0),
+    layers: z.array(z.object({
+        radius: z.number(), // Distance from center
+        size: z.number().default(10), // Size of element
+        count: z.number().optional(), // If defined, can differ from axes count (but usually matches)
+        label: z.string(), // The shape/emoji/symbol
+        rotation: z.boolean().default(true), // Rotate with the axis?
+        offsetRotate: z.number().default(0), // Additional rotation of the item itself
+    })),
+});
+
 export const SceneSpecSchema = z.object({
-    type: z.enum(['circle', 'grid', 'axis', 'compass', 'radar', 'timeline', 'clock', 'venn', 'spiral']),
+    type: z.enum(['circle', 'grid', 'axis', 'compass', 'radar', 'timeline', 'clock', 'venn', 'spiral', 'mandala']),
     id: z.string(),
     geometry: GeometrySchema,
     segments: SegmentsSchema.optional(),
@@ -118,6 +131,7 @@ export const SceneSpecSchema = z.object({
     venn: VennSchema.optional(),
     grid: GridSchema.optional(),
     spiral: SpiralSchema.optional(),
+    mandala: MandalaSchema.optional(),
     style: StyleSchema.optional(),
     output: OutputSchema.optional(),
 });
@@ -138,6 +152,7 @@ export type Clock = z.infer<typeof ClockSchema>;
 export type Venn = z.infer<typeof VennSchema>;
 export type Grid = z.infer<typeof GridSchema>;
 export type Spiral = z.infer<typeof SpiralSchema>;
+export type Mandala = z.infer<typeof MandalaSchema>;
 export type SceneSpec = z.infer<typeof SceneSpecSchema>;
 
 // ============================================================================
@@ -190,6 +205,14 @@ export interface SpiralSpec extends SceneSpec {
         center: Point;
     };
     spiral: Spiral;
+}
+
+export interface MandalaSpec extends SceneSpec {
+    type: 'mandala';
+    geometry: {
+        center: Point;
+    };
+    mandala: Mandala;
 }
 
 // ============================================================================
@@ -254,6 +277,13 @@ export function isGridSpec(spec: SceneSpec): spec is GridSpec {
  */
 export function isSpiralSpec(spec: SceneSpec): spec is SpiralSpec {
     return spec.type === 'spiral';
+}
+
+/**
+ * Check if spec is a mandala type
+ */
+export function isMandalaSpec(spec: SceneSpec): spec is MandalaSpec {
+    return spec.type === 'mandala';
 }
 
 // ============================================================================
